@@ -1,1 +1,5 @@
 rootProject.name = 'test'
+include 'test-core'
+include 'test-api'
+include 'test-batch'
+
