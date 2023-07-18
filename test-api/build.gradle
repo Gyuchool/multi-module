@@ -4,11 +4,3 @@ dependencies {
     //add
     implementation project(':test-core')
 }
-
-bootJar {
-    enabled = true
-}
-
-jar {
-    enabled = false
-}
