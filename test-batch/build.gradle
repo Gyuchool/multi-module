@@ -1,13 +1,11 @@
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    //add
-    implementation project(':test-core')
     implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
     testImplementation 'org.springframework.batch:spring-batch-test'
 }
+
 bootJar {
+    archiveFileName = 'fnb-dodo-point-batch.jar'
     enabled = true
 }
 
