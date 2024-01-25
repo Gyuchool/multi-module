@@ -1,46 +1,62 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.1.1'
-	id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'org.springframework.boot' version '3.1.1'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
-allprojects {
-	group = 'com.batch'
-	version = '0.0.1-SNAPSHOT'
+allprojects{
+    group 'com.multi-module'
+    version '0.0.1'
+
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://nexus.yanolja.in/repository/maven-public/'
+        }
+    }
 }
 
-java {
-	sourceCompatibility = '17'
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    compileJava.options.encoding = 'UTF-8'
+    sourceCompatibility = '17'
+
+    test {
+        useJUnitPlatform()
+    }
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    // 모듈에 공통적인 디펜던시 추가
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'software.amazon.awssdk:ssm:2.20.68'
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
 }
 
-repositories {
-	mavenCentral()
+project(':test-api'){
+    dependencies {
+        implementation project(':test-core')
+    }
 }
 
-allprojects {
-	apply plugin: 'java'
-	apply plugin: 'org.springframework.boot'
-	apply plugin: 'io.spring.dependency-management'
-
-	compileJava.options.encoding = 'UTF-8'
-
-	repositories {
-		mavenCentral()
-	}
-
-	configurations {
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-	}
-
-	// 모듈에 공통적인 디펜던시 추가
-	dependencies {
-		implementation 'org.springframework.boot:spring-boot-starter-web'
-		runtimeOnly 'com.h2database:h2'
-		runtimeOnly 'com.mysql:mysql-connector-j'
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
-	}
-
+project(':test-batch'){
+    dependencies {
+        implementation project(':test-core')
+    }
 }
+
+bootJar.enabled = false
+
+
